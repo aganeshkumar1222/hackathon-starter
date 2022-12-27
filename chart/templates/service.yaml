@@ -9,4 +9,4 @@ spec:
   ports:
     - port: {{ .Values.service.port }}
   selector:
-    {{- include "demochart.selectorLabels" . | nindent 4 }}
+    app : "{{ .Values.appname }}"
