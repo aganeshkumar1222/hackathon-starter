@@ -80,3 +80,7 @@ jobs:
         run: |
           helm upgrade --install --atomic --timeout 1m rest ./chart/ -f ./chart/values.yaml  --namespace dev --create-namespace \
             --set image.tag=${{ github.sha }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
