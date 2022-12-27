@@ -1,7 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Values.deploymentname }}"
+  name: "{{ .Values.appname }}"
+  namespace: "{{ .Values.namespace }}"
   labels:
      app : "{{ .Values.appname }}"
      environment: "{{ .Values.environment }}"
@@ -16,5 +17,13 @@ spec:
         app : "{{ .Values.appname }}"
     spec:
       containers:
-        - name: "{{ .Values.containername }}"
+        - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          env:
+          - name: MONGODB_URI
+            valueFrom:
+             secretKeyRef:
+               name: mongosecret
+               key: mongourl
+          ports:
+          - containerPort: 8080
