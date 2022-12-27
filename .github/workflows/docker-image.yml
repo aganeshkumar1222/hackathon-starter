@@ -78,7 +78,7 @@ jobs:
         run: helm lint ./chart/
       - name: Deploy
         run: |
-          helm upgrade --install ./chart/ -f ./chart/values.yaml  --namespace dev --create-namespace \
+          helm upgrade --install -f ./chart/values.yaml nodejsdemo ./chart/  --namespace dev \
             --set image.tag=${{ github.sha }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
