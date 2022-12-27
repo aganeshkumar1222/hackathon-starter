@@ -53,3 +53,7 @@ jobs:
         env:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Push the image to Dockerhub
+        run: |
+          docker push docker.io/aganeshkumar1222/hackathon-nodejs:${{ github.sha }}
+     
