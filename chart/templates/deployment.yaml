@@ -3,17 +3,18 @@ kind: Deployment
 metadata:
   name: {{ include "demochart.fullname" . }}
   labels:
-    {{- include "demochart.labels" . | nindent 4 }}
+     app : "{{ .Values.appname }}"
+     environment: "{{ .Values.environment }}"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "demochart.selectorLabels" . | nindent 6 }}
+      app : "{{ .Values.appname }}"
   template:
     metadata:
       labels:
-        {{- include "demochart.selectorLabels" . | nindent 8 }}
+        app : "{{ .Values.appname }}"
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
