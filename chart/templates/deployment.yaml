@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "demochart.fullname" . }}
+  name: "{{ .Values.deploymentname }}"
   labels:
      app : "{{ .Values.appname }}"
      environment: "{{ .Values.environment }}"
@@ -16,5 +16,5 @@ spec:
         app : "{{ .Values.appname }}"
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: "{{ .Values.containername }}"
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
