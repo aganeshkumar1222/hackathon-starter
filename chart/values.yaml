@@ -5,6 +5,9 @@
 replicaCount: 1
 environment: dev
 appname: nodejs
+deploymentname: nodejsdeployment
+servicename: nodejsservice
+containername: nodejscontainer
 image:
   repository: aganeshkumar1222/hackathon-nodejs
   # Overrides the image tag whose default is the chart appVersion.
