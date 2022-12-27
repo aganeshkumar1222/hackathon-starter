@@ -5,6 +5,7 @@
 replicaCount: 1
 environment: dev
 appname: nodejs
+namespace: dev
 deploymentname: nodejsdeployment
 servicename: nodejsservice
 containername: nodejscontainer
