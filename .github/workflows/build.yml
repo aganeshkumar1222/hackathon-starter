@@ -32,7 +32,7 @@ jobs:
       # building the image with the tag as the github commit id
       - name: Build an image from Dockerfile
         run: |
-          docker build -t docker.io/aganeshkumar1222/hackathon-nodejs:${{ github.sha }} -t latest .
+          docker build -t docker.io/aganeshkumar1222/hackathon-nodejs:${{ github.sha }} -t docker.io/aganeshkumar1222/hackathon-nodejs:latest .
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
       # Running trivy scan on docker image and exit on critical and high issues, exit 1 was commented so that the pipeline can continue as there are critical and high vulnerabilities in the code
