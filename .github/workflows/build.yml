@@ -60,33 +60,4 @@ jobs:
       - name: Push the image to Dockerhub
         run: |
           docker push docker.io/aganeshkumar1222/hackathon-nodejs:${{ github.sha }}
-     
-  deploy:
-    needs: [build-and-push-docker-image]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      # creating kubeconfig file with the cluster authentication added in KUBE_CONFIG secret
-      - name: Create kube config
-        run: |
-          mkdir -p $HOME/.kube/
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
-      - name: Install helm
-        run: |
-          curl -LO https://get.helm.sh/helm-v3.8.0-linux-amd64.tar.gz
-          tar -zxvf helm-v3.8.0-linux-amd64.tar.gz
-          mv linux-amd64/helm /usr/local/bin/helm
-          helm version
-      - name: Lint helm charts
-        run: helm lint ./chart/
-      # deploy the helm chart in dev namespace, similarly we can use different values file for other envs
-      - name: Deploy
-        run: |
-          helm upgrade --install -f ./chart/values.yaml nodejsdemo ./chart/  --namespace dev \
-            --set image.tag=${{ github.sha }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+
