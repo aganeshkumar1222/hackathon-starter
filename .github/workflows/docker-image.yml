@@ -15,6 +15,7 @@ jobs:
 
     # steps to perform in job
     steps:
+      # cloining the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -22,17 +23,19 @@ jobs:
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2
-
+      # login to my dockerhub account, the DOCKERHUB_USERNAME and DOCKERHUB_TOKEN are configured in github secrets
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # building the image with the tag as the github commit id
       - name: Build an image from Dockerfile
         run: |
           docker build -t docker.io/aganeshkumar1222/hackathon-nodejs:${{ github.sha }} .
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      # Running trivy scan on docker image and exit on critical and high issues, exit 1 was commented so that the pipeline can continue as there are critical and high vulnerabilities in the code
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
@@ -42,12 +45,13 @@ jobs:
           severity: 'CRITICAL,HIGH'
           #exit-code: '1'
           scan-type: image
-
+      # you can view the scan results in security tab 
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
+      # running sonar san and uploading reports to sonar cloud
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
@@ -63,6 +67,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      # creating kubeconfig file with the cluster authentication added in KUBE_CONFIG secret
       - name: Create kube config
         run: |
           mkdir -p $HOME/.kube/
@@ -76,6 +81,7 @@ jobs:
           helm version
       - name: Lint helm charts
         run: helm lint ./chart/
+      # deploy the helm chart in dev namespace, similarly we can use different values file for other envs
       - name: Deploy
         run: |
           helm upgrade --install -f ./chart/values.yaml nodejsdemo ./chart/  --namespace dev \
